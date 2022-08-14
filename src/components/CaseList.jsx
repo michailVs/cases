@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import CaseItem from './CaseItem'
 
-const CaseList = ({balance, setBalance, setInventory, inventory}) => {
+const CaseList = ({balance, setBalance, setInventory, inventory, setCaseCount, caseCount}) => {
     const caseItem = [
         {title: 'Штык-нож | Autotronic', src: 'https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zPYgJA7cW5moWfqPbhJ7TFhGRf4cZOhuDG_Zi73FbjrUtsaj_3cdORcQJqNw7YrFO5wbzvgZe9vJ3JyHA1uSlx4CqPygv330-muln14A/130fx97f/image.png', price: 32000, id: 1},
         {title: 'Штык-нож | Волны', src: 'https://community.cloudflare.steamstatic.com/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpotLu8JAllx8zJfAJG48ymmIWZqOf8MqjUxVRd4cJ5nqeXpdzx0FHgqhFqZmn6IY_DI1U8aFuB_FLql-nt1pe7tMybzHFmvCUj-z-DyAETkzcY/130fx97f/image.png', price: 47000, id: 2},
@@ -11,17 +11,22 @@ const CaseList = ({balance, setBalance, setInventory, inventory}) => {
     ]
     const [isOpen, setOpen] = useState(false)
     function caseOpen() {
-        if (isOpen){
-            setOpen(false)
-            setInventory([...inventory, ...randomItemArr])
-            setRandomItemArr([])
-        } else {
-            setOpen(true)
-            randomItem()
-            !randomItemArr.length ? setBalance(balance - 6000) : setBalance(balance)
-        }
-        if (balance < 6000) {
-            setOpen(true)
+        try {
+            if (isOpen){
+                setOpen(false)
+                setInventory([...inventory, ...randomItemArr])
+                setRandomItemArr([])
+            } else {
+                setOpen(true)
+                randomItem()
+                setCaseCount(caseCount + 1)
+                !randomItemArr.length ? setBalance(balance - 6000) : setBalance(balance)
+            }
+            if (balance < 6000) {
+                setOpen(true)
+            }
+        } catch (e) {
+            alert(`Error: ${e}`)
         }
     }
     const [randomItemArr, setRandomItemArr] = useState([])
